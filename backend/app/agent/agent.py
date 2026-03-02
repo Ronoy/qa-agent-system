@@ -47,7 +47,7 @@ async def run_agent_stream(
 
             yield {"type": "tool_call", "tool_name": tool_name, "tool_args": tool_args}
 
-            result = execute_tool(tool_name, tool_args)
+            result = await execute_tool(tool_name, tool_args)
 
             yield {"type": "tool_result", "tool_name": tool_name, "content": result}
 

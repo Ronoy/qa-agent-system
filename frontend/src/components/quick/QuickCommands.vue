@@ -1,6 +1,5 @@
 <template>
   <div class="quick-commands">
-    <span class="label">快捷</span>
     <div class="cmds">
       <button
         v-for="cmd in commands"
@@ -24,32 +23,23 @@ defineEmits<{ select: [text: string] }>()
 const { isStreaming } = storeToRefs(useChatStore())
 
 const commands = [
-  { icon: '📋', text: '查任务进度' },
+  { icon: '🌐', text: '搜索今日学习资讯' },
   { icon: '📊', text: '查询学情' },
-  { icon: '🧠', text: '查知识点掌握度' },
-  { icon: '📅', text: '查考勤记录' },
-  { icon: '💡', text: '学习建议' }
+  { icon: '📋', text: '查任务进度' },
+  { icon: '🧮', text: '帮我解一道数学题' },
+  { icon: '📖', text: '讲解一个知识点' },
+  { icon: '✏️', text: '给我出几道练习题' },
+  { icon: '📅', text: '制定本周学习计划' },
+  { icon: '💡', text: '学习建议' },
 ]
 </script>
 
 <style scoped>
 .quick-commands {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   padding: 8px 16px 4px;
   overflow-x: auto;
 }
 .quick-commands::-webkit-scrollbar { display: none; }
-
-.label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-  text-transform: uppercase;
-}
 
 .cmds { display: flex; gap: 6px; }
 

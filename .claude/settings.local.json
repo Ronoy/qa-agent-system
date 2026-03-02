@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/Ronoy/qa-agent-system/backend/app/api -type f -name \"*.py\" | xargs ls -la)",
+      "Bash(tree -L 3 -I 'node_modules|venv|__pycache__|.git|*.pyc|.egg-info' /Users/Ronoy/qa-agent-system/backend/ 2>/dev/null || find /Users/Ronoy/qa-agent-system/backend -type f -name \"*.py\" | head -30)",
+      "WebFetch(domain:skywork.ai)",
+      "WebFetch(domain:www.andriifurmanets.com)"
+    ]
+  }
+}

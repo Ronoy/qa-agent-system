@@ -1,0 +1,4 @@
+WARNING: You are using pip version 21.2.4; however, version 26.0.1 is available.
+You should consider upgrading via the '/Users/Ronoy/qa-agent-system/backend/venv/bin/python3 -m pip install --upgrade pip' command.
+INFO:     Will watch for changes in these directories: ['/Users/Ronoy/qa-agent-system/backend']
+ERROR:    [Errno 48] Address already in use

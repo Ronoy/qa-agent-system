@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, Text, DateTime, Integer, ForeignKey
+from sqlalchemy import Column, String, Text, DateTime, Integer, ForeignKey, BigInteger
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy.ext.asyncio import async_sessionmaker
@@ -9,6 +9,16 @@ from app.config import DATABASE_URL
 
 class Base(DeclarativeBase):
     pass
+
+
+class AttachmentORM(Base):
+    __tablename__ = "attachments"
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    file_name = Column(String, nullable=False)
+    file_type = Column(String, nullable=False)  # 'image' | 'pdf' | 'document'
+    file_path = Column(String, nullable=False)
+    extracted_text = Column(Text, nullable=True)  # OCR/PDF 提取的文本
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class ConversationORM(Base):
@@ -35,6 +45,7 @@ AsyncSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_co
 
 
 async def init_db():
+    from app.db import knowledge  # noqa: ensure KB models are registered
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 

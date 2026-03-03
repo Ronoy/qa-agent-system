@@ -5,11 +5,26 @@ import json
 import uuid
 from datetime import datetime
 
-from app.db.database import AsyncSessionLocal, ConversationORM, MessageORM
+from app.db.database import AsyncSessionLocal, ConversationORM, MessageORM, AttachmentORM
 from app.models.schemas import ChatRequest
 from app.agent.agent import run_agent_stream
 
 router = APIRouter()
+
+
+async def _load_attachments(attachment_ids: list[str]) -> list[dict]:
+    """加载附件数据"""
+    attachments = []
+    async with AsyncSessionLocal() as db:
+        for att_id in attachment_ids:
+            att = await db.get(AttachmentORM, att_id)
+            if att:
+                attachments.append({
+                    "file_name": att.file_name,
+                    "file_type": att.file_type,
+                    "extracted_text": att.extracted_text or "",
+                })
+    return attachments
 
 
 @router.post("/stream")
@@ -44,8 +59,13 @@ async def chat_stream(req: ChatRequest):
     async def event_generator():
         yield f"data: {json.dumps({'type': 'conversation_id', 'content': conv_id}, ensure_ascii=False)}\n\n"
 
+        # 加载附件
+        attachments = []
+        if req.attachment_ids:
+            attachments = await _load_attachments(req.attachment_ids)
+
         full_response = []
-        async for event in run_agent_stream(req.message, history):
+        async for event in run_agent_stream(req.message, history, attachments, req.kb_ids, req.model):
             yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
             if event["type"] == "text":
                 full_response.append(event["content"])

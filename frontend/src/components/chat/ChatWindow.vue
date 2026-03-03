@@ -115,10 +115,10 @@ const featureCards = [
 
 function handleNewChat() { chatStore.clearMessages() }
 
-async function handleSend(message: string) {
+async function handleSend(message: string, attachmentIds: string[] = [], kbIds: { id: string; name: string }[] = [], model?: string) {
   chatStore.addUserMessage(message)
   try {
-    await sendMessage(message, currentConversationId.value)
+    await sendMessage(message, currentConversationId.value, attachmentIds, kbIds, model)
     await convStore.fetchAll()
   } catch (err) {
     chatStore.finishStreaming()

@@ -3,23 +3,28 @@
     <Sidebar
       :conversations="conversations"
       :active-id="activeConvId"
+      :section="section"
       @new-chat="handleNewChat"
       @select-conv="handleSelectConv"
       @delete-conv="handleDeleteConv"
+      @change-section="section = $event"
     />
-    <ChatWindow />
+    <KnowledgeBase v-if="section === 'knowledge'" />
+    <ChatWindow v-else />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useChatStore } from '@/stores/chat'
 import { useConversationStore } from '@/stores/conversation'
 import { conversationService } from '@/services/conversationService'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
 import ChatWindow from '@/components/chat/ChatWindow.vue'
+import KnowledgeBase from '@/components/knowledge/KnowledgeBase.vue'
 
+const section = ref('chat')
 const chatStore = useChatStore()
 const convStore = useConversationStore()
 const { conversations } = storeToRefs(convStore)

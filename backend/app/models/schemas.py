@@ -34,6 +34,9 @@ class ConversationCreate(BaseModel):
 class ChatRequest(BaseModel):
     conversation_id: Optional[str] = None
     message: str
+    attachment_ids: Optional[List[str]] = None
+    kb_ids: Optional[List[dict]] = None  # [{"id": "...", "name": "..."}]
+    model: Optional[str] = None  # deepseek-chat | deepseek-reasoner
 
 
 class ChatStreamEvent(BaseModel):

@@ -1,16 +1,34 @@
 import type { ChatStreamEvent } from '@/types'
 import { useChatStore } from '@/stores/chat'
 
+export async function uploadFile(file: File): Promise<string> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const res = await fetch('/api/upload', { method: 'POST', body: formData })
+  if (!res.ok) throw new Error('上传失败')
+  const data = await res.json()
+  return data.attachment_id
+}
+
 export async function sendMessage(
   message: string,
-  conversationId: string | null
+  conversationId: string | null,
+  attachmentIds: string[] = [],
+  kbIds: { id: string; name: string }[] = [],
+  model?: string
 ): Promise<void> {
   const chatStore = useChatStore()
 
   const res = await fetch('/api/chat/stream', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, conversation_id: conversationId })
+    body: JSON.stringify({
+      message,
+      conversation_id: conversationId,
+      attachment_ids: attachmentIds.length ? attachmentIds : undefined,
+      kb_ids: kbIds.length ? kbIds : undefined,
+      model: model || undefined,
+    })
   })
 
   if (!res.ok || !res.body) {

@@ -26,7 +26,9 @@
       <div class="section-group">
         <div class="section-label">功能</div>
         <div class="nav-items">
-          <div v-for="item in navItems" :key="item.key" class="nav-item">
+          <div v-for="item in navItems" :key="item.key"
+            class="nav-item" :class="{ active: section === item.key }"
+            @click="$emit('changeSection', item.key)">
             <span class="nav-icon" :style="{ background: item.bg }">
               <component :is="item.icon" :color="item.color" />
             </span>
@@ -65,8 +67,8 @@ import { defineComponent, h } from 'vue'
 import type { Conversation } from '@/types'
 import ConversationList from './ConversationList.vue'
 
-defineProps<{ conversations: Conversation[]; activeId: string | null }>()
-defineEmits<{ newChat: []; selectConv: [id: string]; deleteConv: [id: string] }>()
+defineProps<{ conversations: Conversation[]; activeId: string | null; section: string }>()
+defineEmits<{ newChat: []; selectConv: [id: string]; deleteConv: [id: string]; changeSection: [key: string] }>()
 
 const makeIcon = (paths: Array<{ tag: string; attrs: Record<string, string> }>) =>
   defineComponent({
@@ -172,7 +174,7 @@ const navItems = [
   color: var(--text-secondary);
   font-size: 13px;
 }
-.nav-item:hover { background: var(--bg); color: var(--text-primary); }
+.nav-item:hover, .nav-item.active { background: var(--bg); color: var(--text-primary); }
 
 .nav-icon {
   width: 28px; height: 28px;

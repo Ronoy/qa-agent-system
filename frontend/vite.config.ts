@@ -13,6 +13,11 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8000',
         changeOrigin: true
+      },
+      '/rag': {
+        target: 'https://fifedu.com',
+        changeOrigin: true,
+        secure: false
       }
     }
   }

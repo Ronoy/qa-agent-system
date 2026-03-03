@@ -4,7 +4,19 @@
       "Bash(find /Users/Ronoy/qa-agent-system/backend/app/api -type f -name \"*.py\" | xargs ls -la)",
       "Bash(tree -L 3 -I 'node_modules|venv|__pycache__|.git|*.pyc|.egg-info' /Users/Ronoy/qa-agent-system/backend/ 2>/dev/null || find /Users/Ronoy/qa-agent-system/backend -type f -name \"*.py\" | head -30)",
       "WebFetch(domain:skywork.ai)",
-      "WebFetch(domain:www.andriifurmanets.com)"
+      "WebFetch(domain:www.andriifurmanets.com)",
+      "Bash(source venv/bin/activate && timeout 10 uvicorn app.main:app --host 0.0.0.0 --port 8000 2>&1 | head -50)",
+      "Bash(cd /Users/Ronoy/qa-agent-system/backend && sqlite3 qa_agent.db \"SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%knowledge%';\")",
+      "Bash(sqlite3 qa_agent.db \"SELECT COUNT\\(*\\) as total_chunks, COUNT\\(embedding\\) as chunks_with_embedding FROM knowledge_chunks;\")",
+      "Bash(sqlite3 qa_agent.db \"SELECT id, name, description FROM knowledge_bases;\")",
+      "Bash(sqlite3 qa_agent.db \"SELECT id, kb_id, file_name, status, chunk_count FROM knowledge_documents;\")",
+      "Bash(source venv/bin/activate && python rebuild_embeddings.py)",
+      "Bash(curl -s http://localhost:8000/api/data/attendance | head -c 200)",
+      "Bash(curl -s http://localhost:8000/api/knowledge/bases | python3 -m json.tool)",
+      "Bash(curl -s http://localhost:8000/api/conversations | python3 -m json.tool | head -20)",
+      "Bash(sqlite3 qa_agent.db \"SELECT COUNT\\(*\\) as total, COUNT\\(embedding\\) as with_embedding FROM knowledge_chunks;\")",
+      "Bash(brew install tesseract tesseract-lang)",
+      "Bash(curl -s http://localhost:5173 2>&1 | grep -i \"error\\\\|refused\" || echo \"前端正常\")"
     ]
   }
 }
